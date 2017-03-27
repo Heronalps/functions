@@ -315,4 +315,7 @@ imports:
   - internal/scram
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+- name: github.com/cmdhema/nvidia-docker
+  version: 01d2c9436620d7dde4672e414698afe6da4a282f
+
 testImports: []
