@@ -207,14 +207,6 @@ imports:
   version: 4a046af3249dd5933a8d328f965e9717c97fef24
   subpackages:
   - lambda
-- name: github.com/iron-io/runner
-  version: 64628300dc9a81328c4ee6a81068f2c3a1e430f0
-  subpackages:
-  - common
-  - common/stats
-  - drivers
-  - drivers/docker
-  - drivers/mock
 - name: github.com/jmespath/go-jmespath
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
 - name: github.com/jmoiron/jsonq
@@ -315,4 +307,14 @@ imports:
   - internal/scram
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+- name: github.com/NVIDIA/nvidia-docker
+  version: 01d2c9436620d7dde4672e414698afe6da4a282f
+- name: github.com/cmdhema/runner
+  version: f64984d1008b1321b7f11a576d7febf556e70bd9
+  subpackages:
+  - common
+  - common/stats
+  - drivers
+  - drivers/docker
+  - drivers/mock
 testImports: []
