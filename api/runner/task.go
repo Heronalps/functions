@@ -4,45 +4,80 @@ import (
 	"context"
 	"io"
 	"time"
-	//"fmt"
+	"fmt"
 	"log"
 	"github.com/fsouza/go-dockerclient"
 	"github.com/iron-io/functions/api/runner/task"
 	"github.com/iron-io/runner/drivers"
-	"github.com/NVIDIA/nvidia-docker/src/nvidia"
+	"github.com/cmdhema/nvidia-docker/src/nvidia"
 )
 
+var (
+	VolumesPath string = "/var/lib/nvidia-docker/volumes"
+)
 type containerTask struct {
 	ctx    context.Context
 	cfg    *task.Config
 	canRun chan bool
 }
 
-func (t *containerTask) Volumes() [][2]string {
-	//vols, err := nvidia_docker.VolumesNeeded(t.cfg.Image)
-	//if  err != nil {
-	//	volumes := nvidia_docker.VolumesArgs(vols)
-	//	fmt.Println(volumes)
-	//	devices := nvidia_docker.DevicesArgs()
-	//	fmt.Println(devices)
-	//}
-
-	//log.Println("Discovering GPU devices")
-	//Devices, err = nvidia.LookupDevices()
-	//assert(err)
-	//
-	//log.Println("Provisioning volumes at", "/var/lib/nvidia-docker/volumes")
-	//Volumes, err = nvidia.LookupVolumes("/var/lib/nvidia-docker/volumes")
-	//assert(err)
-	//
-	//fmt.Println("Device")
-	//fmt.Println(Devices)
-	//fmt.Println("Volumes")
-	//fmt.Println(Volumes)
-
-	return [][2]string{}
+func assert(err error) {
+	if err != nil {
+		log.Panicln("Error:", err)
+	}
 }
 
+func (t *containerTask) Volumes() [][2]string {
+
+	log.Println("Loading NVIDIA unified memory")
+	assert(nvidia.LoadUVM())
+
+	log.Println("Loading NVIDIA management library")
+	assert(nvidia.Init())
+	defer func() { assert(nvidia.Shutdown()) }()
+
+	Volumes, err := nvidia.LookupVolumes(VolumesPath)
+	assert(err)
+
+	volumes := [][2]string{}
+	for _, vol := range Volumes {
+		hostDir := fmt.Sprintf("%s_%s", vol.VolumeInfo.Name, vol.Version)
+		containerDir := fmt.Sprintf("%s:%s", vol.VolumeInfo.Mountpoint, vol.VolumeInfo.MountOptions)
+		volumes = append(volumes, [2]string{hostDir, containerDir})
+
+	}
+
+	return volumes
+}
+
+func (t * containerTask) Devices() [][3]string {
+
+	log.Println("Loading NVIDIA unified memory")
+	assert(nvidia.LoadUVM())
+
+	log.Println("Loading NVIDIA management library")
+	assert(nvidia.Init())
+	defer func() { assert(nvidia.Shutdown()) }()
+
+	Devices, err := nvidia.LookupDevices()
+	assert(err)
+
+	devices := [][3]string{}
+	for _, device := range Devices {
+		if device.NVMLDevice != nil {
+			devices = append(devices, [3]string{device.NVMLDevice.Path,device.NVMLDevice.Path,"rwm"})
+		} else {
+			fmt.Println("CUDA")
+		}
+	}
+	ControlDevices, err := nvidia.GetControlDevicePaths()
+	for i := range ControlDevices {
+		fmt.Println(ControlDevices[i])
+		devices = append(devices, [3]string{ControlDevices[i], ControlDevices[i],"rwm"})
+	}
+
+	return devices
+}
 
 func (t *containerTask) Command() string { return "" }
 
