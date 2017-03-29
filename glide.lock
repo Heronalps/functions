@@ -308,14 +308,8 @@ imports:
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
 - name: github.com/cmdhema/nvidia-docker
-  version: 01d2c9436620d7dde4672e414698afe6da4a282f
+  version: 3d143349ab6e0f7f5ec84ea291253f82803c544a
 - name: github.com/cmdhema/runner
-  version: f64984d1008b1321b7f11a576d7febf556e70bd9
-  subpackages:
-  - common
-  - common/stats
-  - drivers
-  - drivers/docker
-  - drivers/mock
+  version: 00fb4b2e3ecd0789809a17be5c8bd0d9353ad28e
 
 testImports: []
