@@ -76,6 +76,7 @@ GLOBAL OPTIONS:
 		images(),
 		lambda(),
 		version(),
+		createFn(),
 	}
 	app.Commands = append(app.Commands, aliasesFn()...)
 

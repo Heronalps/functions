@@ -44,9 +44,11 @@ type funcfile struct {
 	Config     map[string]string `yaml:"config,omitempty",json:"config,omitempty"`
 	Build      []string          `yaml:"build,omitempty",json:"build,omitempty"`
 	Tests      []fftest          `yaml:"tests,omitempty",json:"tests,omitempty"`
+	Deeplearning *string	      `yaml:"deeplearning,omitempty",json:"deeplearning,omitempty"`
 
 	path           *string `yaml:"path,omitempty",json:"path,omitempty"`
 	maxConcurrency *int    `yaml:"max_concurrency,omitempty",json:"max_concurrency,omitempty"`
+
 }
 
 func (ff *funcfile) FullName() string {
