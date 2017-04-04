@@ -253,13 +253,12 @@ func (s *Server) bindHandlers(ctx context.Context) {
 	{
 		v1.GET("/apps", s.handleAppList)
 		v1.POST("/apps", s.handleAppCreate)
-
+		v1.POST("/build", s.handleBuild)
 		v1.GET("/apps/:app", s.handleAppGet)
 		v1.PATCH("/apps/:app", s.handleAppUpdate)
 		v1.DELETE("/apps/:app", s.handleAppDelete)
 
 		v1.GET("/routes", s.handleRouteList)
-
 		apps := v1.Group("/apps/:app")
 		{
 			apps.GET("/routes", s.handleRouteList)
@@ -301,4 +300,9 @@ type routesResponse struct {
 type tasksResponse struct {
 	Message string      `json:"message"`
 	Task    models.Task `json:"tasksResponse"`
+}
+
+type buildResponse struct {
+	Message string      `json:"message"`
+	Build *models.Build  `json:"build"`
 }

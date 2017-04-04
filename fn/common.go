@@ -43,6 +43,7 @@ func buildfunc(verbwriter io.Writer, fn string) (*funcfile, error) {
 		}
 	}
 
+	fmt.Println("Local Build")
 	if err := localbuild(verbwriter, fn, funcfile.Build); err != nil {
 		return nil, err
 	}
@@ -108,6 +109,10 @@ func dockerbuild(verbwriter io.Writer, path string, ff *funcfile) error {
 	return nil
 }
 
+func remotebuild(verbwriter io.Writer, path string, steps []string) error {
+
+	return nil
+}
 func exists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
 		if os.IsNotExist(err) {
