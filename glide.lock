@@ -313,5 +313,7 @@ imports:
   version: 3d143349ab6e0f7f5ec84ea291253f82803c544a
 - name: github.com/cmdhema/runner
   version: f3ef23718b33cfe18baf31d175b6d91b7952202d
+- name: github.com/cmdhema/functions_go
+  version: a114b018dab2bfc1898675de8c861c403790a22a
 
 testImports: []
