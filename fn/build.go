@@ -73,19 +73,17 @@ func (b *buildcmd) build(c *cli.Context) error {
 			return err
 		}
 
-		fmt.Printf("Function %v local built successfully.\n", ff.Name)
+		fmt.Printf("Function %v local built successfully.\n", ff.FullName())
 	} else {
-		fmt.Println("Remote build")
-
 		funcfile, err := parsefuncfile(fn)
 
-
+		fmt.Println("Remote build : " + funcfile.FullName())
 		if err != nil {
 			return err
 		}
 
 		body := &models.BuildWrapper{Build: &models.Build{
-			Name:   	funcfile.Name,
+			Name:   	funcfile.FullName(),
 			Code:		getFuncCode(path),
 			Deeplearning:	*funcfile.Deeplearning,
 			Entrypoint:	funcfile.Entrypoint,

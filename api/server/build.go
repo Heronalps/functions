@@ -11,9 +11,10 @@ import (
 	"path/filepath"
 	"text/template"
 
+	driverscommon "github.com/cmdhema/runner/drivers"
 	"github.com/cmdhema/runner/drivers/docker"
 	"github.com/iron-io/functions/api/models"
-	"github.com/iron-io/runner/common"
+	"github.com/cmdhema/runner/common"
 	"github.com/gin-gonic/gin"
 	"bytes"
 )
@@ -54,6 +55,9 @@ func (s *Server) handleBuild(c *gin.Context) {
 	fmt.Println(build.Build.Name)
 
 	writeTmpDockerfile(Path, build.Build)
+	env := common.NewEnvironment(func(e *common.Environment) {})
+	driver := docker.NewDocker(env, *(&driverscommon.Config{}))
+	fmt.Println(driver.Build(build.Build.Name))
 	c.JSON(http.StatusOK, appsResponse{"Successfully listed applications", nil})
 
 }
