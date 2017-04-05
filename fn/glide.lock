@@ -109,15 +109,8 @@ imports:
   version: 24dc7ba4bc1ef9215048b28e7248f99c42901db5
 - name: github.com/hashicorp/go-cleanhttp
   version: ad28ea4487f05916463e2423a55166280e8254b5
-- name: github.com/iron-io/functions_go
-  version: 69e4dec8454c3c710045263c2ede76139c141146
-  subpackages:
-  - client
-  - client/apps
-  - client/routes
-  - client/tasks
-  - client/version
-  - models
+- name: github.com/cmdhema/functions_go
+  version: a114b018dab2bfc1898675de8c861c403790a22a
 - name: github.com/iron-io/iron_go3
   version: b50ecf8ff90187fc5fabccd9d028dd461adce4ee
   subpackages:
@@ -181,4 +174,13 @@ imports:
   - width
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+- name: github.com/iron-io/functions_go
+  version: 69e4dec8454c3c710045263c2ede76139c141146
+  subpackages:
+  - client
+  - client/apps
+  - client/routes
+  - client/tasks
+  - client/version
+  - models
 testImports: []

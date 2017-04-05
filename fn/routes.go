@@ -13,8 +13,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	fnclient "github.com/iron-io/functions_go/client"
-	apiroutes "github.com/iron-io/functions_go/client/routes"
+	fnclient "github.com/cmdhema/functions_go/client"
+	apiroutes "github.com/cmdhema/functions_go/client/routes"
 	"github.com/iron-io/functions_go/models"
 	fnmodels "github.com/iron-io/functions_go/models"
 	"github.com/jmoiron/jsonq"

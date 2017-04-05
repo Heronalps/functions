@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	functions "github.com/iron-io/functions_go"
+	functions "github.com/cmdhema/functions_go"
 	"github.com/urfave/cli"
 )
 

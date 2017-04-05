@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	vers "github.com/iron-io/functions/api/version"
-	functions "github.com/iron-io/functions_go"
+	functions "github.com/cmdhema/functions_go"
 	"github.com/urfave/cli"
 )
 

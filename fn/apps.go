@@ -7,9 +7,9 @@ import (
 	"os"
 
 	"context"
-	"github.com/iron-io/functions_go"
-	fnclient "github.com/iron-io/functions_go/client"
-	apiapps "github.com/iron-io/functions_go/client/apps"
+	"github.com/cmdhema/functions_go"
+	fnclient "github.com/cmdhema/functions_go/client"
+	apiapps "github.com/cmdhema/functions_go/client/apps"
 	"github.com/iron-io/functions_go/models"
 	"github.com/jmoiron/jsonq"
 	"github.com/urfave/cli"

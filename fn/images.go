@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/iron-io/functions_go"
+	"github.com/cmdhema/functions_go"
 	"github.com/urfave/cli"
 )
 

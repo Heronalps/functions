@@ -7,10 +7,9 @@ import (
 	"github.com/urfave/cli"
 
 	"context"
-	//"github.com/iron-io/functions_go"
-	fnclient "github.com/iron-io/functions_go/client"
-	apibuild "github.com/iron-io/functions_go/client/build"
-	"github.com/iron-io/functions_go/models"
+	fnclient "github.com/cmdhema/functions_go/client"
+	apibuild "github.com/cmdhema/functions_go/client/build"
+	"github.com/cmdhema/functions_go/models"
 	"path/filepath"
 )
 
