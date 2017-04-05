@@ -312,6 +312,6 @@ imports:
 - name: github.com/cmdhema/nvidia-docker
   version: 3d143349ab6e0f7f5ec84ea291253f82803c544a
 - name: github.com/cmdhema/runner
-  version: 00fb4b2e3ecd0789809a17be5c8bd0d9353ad28e
+  version: f3ef23718b33cfe18baf31d175b6d91b7952202d
 
 testImports: []
