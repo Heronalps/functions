@@ -3,14 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
-	"bufio"
 	"github.com/urfave/cli"
 
 	"context"
 	fnclient "github.com/cmdhema/functions_go/client"
 	apibuild "github.com/cmdhema/functions_go/client/build"
 	"github.com/cmdhema/functions_go/models"
-	"path/filepath"
 )
 
 func build() cli.Command {
@@ -113,30 +111,3 @@ func (b *buildcmd) build(c *cli.Context) error {
 	return nil
 }
 
-func getFuncCode(path string) (code string) {
-
-	for ext, _ := range fileExtToRuntime {
-		fn := filepath.Join(path, fmt.Sprintf("func%s", ext))
-		if exists(fn) {
-
-			f, err := os.Open(fn)
-			if err != nil {
-				panic(err)
-			}
-			defer f.Close()
-
-			var lines string
-			scanner := bufio.NewScanner(f)
-			for scanner.Scan() {
-				lines += scanner.Text() + "\n"
-			}
-			if err := scanner.Err(); err != nil {
-				fmt.Fprintln(os.Stderr, err)
-			}
-
-			return lines
-		}
-	}
-	return ""
-
-}

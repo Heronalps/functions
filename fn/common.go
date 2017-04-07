@@ -13,6 +13,7 @@ import (
 	"text/template"
 
 	"github.com/iron-io/functions/fn/langs"
+	"bufio"
 )
 
 func verbwriter(verbose bool) io.Writer {
@@ -226,4 +227,32 @@ func appNamePath(img string) (string, string) {
 		tag = len(img[sep:])
 	}
 	return img[:sep], img[sep : sep+tag]
+}
+
+func getFuncCode(path string) (code string) {
+
+	for ext, _ := range fileExtToRuntime {
+		fn := filepath.Join(path, fmt.Sprintf("func%s", ext))
+		if exists(fn) {
+
+			f, err := os.Open(fn)
+			if err != nil {
+				panic(err)
+			}
+			defer f.Close()
+
+			var lines string
+			scanner := bufio.NewScanner(f)
+			for scanner.Scan() {
+				lines += scanner.Text() + "\n"
+			}
+			if err := scanner.Err(); err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			}
+
+			return lines
+		}
+	}
+	return ""
+
 }

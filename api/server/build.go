@@ -57,8 +57,14 @@ func (s *Server) handleBuild(c *gin.Context) {
 	writeTmpDockerfile(Path, build.Build)
 	env := common.NewEnvironment(func(e *common.Environment) {})
 	driver := docker.NewDocker(env, *(&driverscommon.Config{}))
-	fmt.Println(driver.Build(build.Build.Name))
-	c.JSON(http.StatusOK, appsResponse{"Successfully listed applications", nil})
+	err = driver.Build(build.Build.Name)
+	//fmt.Println(driver.Exec())
+	if err != nil {
+		handleErrorResponse(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, buildResponse{"Successfully remote build", build})
 
 }
 
