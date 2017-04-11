@@ -49,7 +49,8 @@ type funcfile struct {
 	Path           *string           `yaml:"path,omitempty" json:"path,omitempty"`
 	MaxConcurrency *int              `yaml:"max_concurrency,omitempty" json:"max_concurrency,omitempty"`
 
-	Deeplearning *string	      `yaml:"deeplearning,omitempty",json:"deeplearning,omitempty"`
+	Deeplearning 	*string		 `yaml:"deeplearning,omitempty",json:"deeplearning,omitempty"`
+	FileName	*string		 `yaml:"filename,omitempty",json:"filename,omitempty"`
 }
 
 func (ff *funcfile) FullName() string {

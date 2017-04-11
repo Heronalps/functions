@@ -7,5 +7,5 @@ type Build struct {
 	Entrypoint 	string 		`json:"entrypoint,omitempty"`
 	Runtime 	string 		`json:"runtime,omitempty"`
 	Cmd 		string 		`json:"cmd,omitempty"`
-
+	FileName	string		`json:"filename,omitempty"`
 }

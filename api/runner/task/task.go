@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/iron-io/runner/drivers"
+	"github.com/cmdhema/runner/drivers"
 )
 
 type Config struct {
@@ -19,6 +19,8 @@ type Config struct {
 	Env                 map[string]string
 	Format              string
 	MaxConcurrency      int
+
+	FileName	    string
 
 	Stdin  io.Reader
 	Stdout io.Writer

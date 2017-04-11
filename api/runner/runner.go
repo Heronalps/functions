@@ -156,7 +156,8 @@ func (r *Runner) checkMemAndUse(req uint64) bool {
 }
 
 func (r *Runner) Run(ctx context.Context, cfg *task.Config) (drivers.RunResult, error) {
-	var err error
+	//var err error
+	var result drivers.RunResult
 
 	if cfg.Memory == 0 {
 		cfg.Memory = 128
@@ -198,20 +199,30 @@ func (r *Runner) Run(ctx context.Context, cfg *task.Config) (drivers.RunResult, 
 	}
 	defer r.addUsedMem(-1 * int64(cfg.Memory))
 
-	cookie, err := r.driver.Prepare(ctx, ctask)
-	if err != nil {
-		return nil, err
-	}
-	defer cookie.Close()
-
 	metricStart := time.Now()
 
-	result, err := cookie.Run(ctx)
-	if err != nil {
-		return nil, err
+	if  cfg.FileName == "" {
+		cookie, err := r.driver.Prepare(ctx, ctask)
+		if err != nil {
+			return nil, err
+		}
+		defer cookie.Close()
+
+		result, err = cookie.Run(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+	} else {
+		var err error
+		fmt.Println("Attempt GPU Run!!!!!")
+		result, err = r.driver.Exec(cfg.FileName)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	if result.Status() == "success" {
+	if result.Status() == "success" || result.Status() == "gpu" {
 		r.mlog.LogCount(ctx, metricBaseName+"succeeded", 1)
 	} else {
 		r.mlog.LogCount(ctx, metricBaseName+"error", 1)

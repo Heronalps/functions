@@ -23,6 +23,8 @@ import (
 	"github.com/iron-io/functions/api/server/internal/routecache"
 	"github.com/iron-io/runner/common"
 	"github.com/spf13/viper"
+	"io"
+	"strings"
 )
 
 const (
@@ -155,6 +157,49 @@ func (s *Server) handleRunnerRequest(c *gin.Context) {
 	s.handleRequest(c, s.Enqueue)
 }
 
+func (s *Server) handleGPURunnerRequest(c *gin.Context) {
+
+	//ctx := c.MustGet("ctx").(context.Context)
+
+	//reqID := uuid.NewV5(uuid.Nil, fmt.Sprintf("%s%s%d", c.Request.RemoteAddr, c.Request.URL.Path, time.Now().Unix())).String()
+	//ctx, log := common.LoggerWithFields(ctx, logrus.Fields{"call_id": reqID})
+	//
+	//var err error
+	//var payload io.Reader
+
+	//appName := c.MustGet(api.AppName).(string)
+	//endPointURL := c.MustGet(api.Path).(string)[1:]
+	//if c.Request.Method == "POST" {
+	//	payload = c.Request.Body
+	//	// Load complete body and close
+	//	defer func() {
+	//		io.Copy(ioutil.Discard, c.Request.Body)
+	//		c.Request.Body.Close()
+	//	}()
+	//} else if c.Request.Method == "GET" {
+	//	reqPayload := c.Request.URL.Query().Get("payload")
+	//	payload = strings.NewReader(reqPayload)
+	//}
+	//
+	//cfg := &task.Config{
+	//	AppName:           appName,
+	//	Path:              found.Path,
+	//	Env:               envVars,
+	//	Format:            found.Format,
+	//	ID:                reqID,
+	//	Image:             found.Image,
+	//	MaxConcurrency:    found.MaxConcurrency,
+	//	Memory:            found.Memory,
+	//	Stdin:             payload,
+	//	Stdout:            &stdout,
+	//	Timeout:           time.Duration(found.Timeout) * time.Second,
+	//	IdleTimeout:       time.Duration(found.IdleTimeout) * time.Second,
+	//}
+	//
+	//s.Runner.Enqueue()
+
+}
+
 func (s *Server) handleTaskRequest(c *gin.Context) {
 	ctx, _ := common.LoggerWithFields(c, nil)
 	switch c.Request.Method {
@@ -274,6 +319,7 @@ func (s *Server) bindHandlers(ctx context.Context) {
 	engine.GET("/tasks", s.handleTaskRequest)
 	engine.Any("/r/:app/*route", s.handleRunnerRequest)
 
+	engine.Any("g/:app/*route", s.handleGPURunnerRequest)
 	// This final route is used for extensions, see Server.Add
 	engine.NoRoute(s.handleSpecial)
 }

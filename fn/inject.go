@@ -55,6 +55,7 @@ func (b *injectcmd) inject(c *cli.Context) error {
 		Deeplearning:	*funcfile.Deeplearning,
 		Entrypoint:	funcfile.Entrypoint,
 		Runtime:	*funcfile.Runtime,
+		FileName:	*funcfile.FileName,
 	}}
 
 	resp, err := b.client.Inject.PostInject(&apibuild.PostBuildParams{

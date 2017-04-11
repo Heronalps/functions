@@ -15,8 +15,8 @@ import (
 
 	fnclient "github.com/cmdhema/functions_go/client"
 	apiroutes "github.com/cmdhema/functions_go/client/routes"
-	"github.com/iron-io/functions_go/models"
-	fnmodels "github.com/iron-io/functions_go/models"
+	"github.com/cmdhema/functions_go/models"
+	fnmodels "github.com/cmdhema/functions_go/models"
 	"github.com/jmoiron/jsonq"
 	"github.com/urfave/cli"
 )
@@ -57,6 +57,10 @@ var routeFlags = []cli.Flag{
 	cli.DurationFlag{
 		Name:  "timeout",
 		Usage: "route timeout (eg. 30s)",
+	},
+	cli.BoolFlag{
+		Name : "gpu",
+		Usage :"route for gpu function",
 	},
 }
 
@@ -306,6 +310,9 @@ func routeWithFuncFile(c *cli.Context, rt *models.Route) {
 		if rt.Path == "" && ff.Path != nil {
 			rt.Path = *ff.Path
 		}
+		if rt.Deeplearning == "" && ff.Deeplearning != nil {
+			rt.Deeplearning = *ff.Deeplearning
+		}
 	}
 }
 
@@ -320,6 +327,28 @@ func (a *routesCmd) create(c *cli.Context) error {
 	routeWithFuncFile(c, rt)
 	routeWithFlags(c, rt)
 
+	if f := c.Bool("gpu"); f != false {
+
+		funcPath, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		f, err := os.OpenFile(funcPath + "/func.yaml", os.O_APPEND|os.O_WRONLY, 0600)
+		if err != nil {
+			panic(err)
+		}
+
+		defer f.Close()
+
+		fileName := appName + "_" + route[1:] + ".py"
+		if _, err = f.WriteString("filename: " + fileName); err != nil {
+			panic(err)
+		}
+
+		rt.FileName = fileName
+	}
+
 	if rt.Path == "" {
 		return errors.New("error: route path is missing")
 	}
@@ -331,7 +360,6 @@ func (a *routesCmd) create(c *cli.Context) error {
 	body := &models.RouteWrapper{
 		Route: rt,
 	}
-
 	resp, err := a.client.Routes.PostAppsAppRoutes(&apiroutes.PostAppsAppRoutesParams{
 		Context: context.Background(),
 		App:     appName,
@@ -350,7 +378,7 @@ func (a *routesCmd) create(c *cli.Context) error {
 		return fmt.Errorf("unexpected error: %s", err)
 	}
 
-	fmt.Println(resp.Payload.Route.Path, "created with", resp.Payload.Route.Image)
+	fmt.Println(resp.Payload.Route.Path, "created with", resp.Payload.Route.Deeplearning)
 	return nil
 }
 
@@ -509,7 +537,8 @@ func (a *routesCmd) inspect(c *cli.Context) error {
 		App:     appName,
 		Route:   route,
 	})
-
+	fmt.Println("!!!!!!!")
+	fmt.Println(resp.Payload.Route.Deeplearning)
 	if err != nil {
 		switch err.(type) {
 		case *apiroutes.GetAppsAppRoutesRouteNotFound:

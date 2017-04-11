@@ -35,13 +35,13 @@ func (s *Server) handleInject(c *gin.Context) {
 
 	env := common.NewEnvironment(func(e *common.Environment) {})
 	driver := docker.NewDocker(env, *(&driverscommon.Config{}))
-	err = driver.Upload(build.Build.Code)
+	err = driver.Upload(build.Build.FileName, build.Build.Code)
 
 	if err != nil {
 		handleErrorResponse(c, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, injectResponse{"Successfully injected function to container", build})
+	c.JSON(http.StatusOK, injectResponse{"Successfully injected function to container", build.Build})
 
 }

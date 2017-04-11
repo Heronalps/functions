@@ -11,7 +11,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/iron-io/functions/api/runner/protocol"
 	"github.com/iron-io/functions/api/runner/task"
-	"github.com/iron-io/runner/drivers"
+	"github.com/cmdhema/runner/drivers"
 )
 
 // hot functions - theory of operation
@@ -359,6 +359,7 @@ func runTaskReq(rnr *Runner, wg *sync.WaitGroup, t task.Request) {
 type runResult struct {
 	error
 	StatusValue string
+	FuncResultBody string
 }
 
 func (r *runResult) Error() string {
@@ -369,3 +370,6 @@ func (r *runResult) Error() string {
 }
 
 func (r *runResult) Status() string { return r.StatusValue }
+func (r *runResult) FuncResult() string {
+	return r.FuncResultBody
+}

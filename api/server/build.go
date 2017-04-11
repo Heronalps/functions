@@ -52,8 +52,6 @@ func (s *Server) handleBuild(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(build.Build.Name)
-
 	writeTmpDockerfile(Path, build.Build)
 	env := common.NewEnvironment(func(e *common.Environment) {})
 	driver := docker.NewDocker(env, *(&driverscommon.Config{}))

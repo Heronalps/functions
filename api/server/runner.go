@@ -188,7 +188,6 @@ func (s *Server) serve(ctx context.Context, c *gin.Context, appName string, foun
 	for header, value := range c.Request.Header {
 		envVars[toEnvName("HEADER", header)] = strings.Join(value, " ")
 	}
-
 	cfg := &task.Config{
 		AppName:           appName,
 		Path:              found.Path,
@@ -202,6 +201,7 @@ func (s *Server) serve(ctx context.Context, c *gin.Context, appName string, foun
 		Stdout:            &stdout,
 		Timeout:           time.Duration(found.Timeout) * time.Second,
 		IdleTimeout:       time.Duration(found.IdleTimeout) * time.Second,
+		FileName:	   found.FileName,
 	}
 
 	s.Runner.Enqueue()
@@ -256,6 +256,8 @@ func (s *Server) serve(ctx context.Context, c *gin.Context, appName string, foun
 					Message: models.ErrRunnerTimeout.Error(),
 				},
 			})
+		case "gpu":
+			c.String(http.StatusOK, result.FuncResult())
 		default:
 			c.JSON(http.StatusInternalServerError, runnerResponse{
 				RequestID: cfg.ID,
