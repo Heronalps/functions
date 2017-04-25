@@ -9,6 +9,12 @@ import (
 	fnclient "github.com/cmdhema/functions_go/client"
 	apibuild "github.com/cmdhema/functions_go/client/build"
 	"github.com/cmdhema/functions_go/models"
+	"net/http"
+	"bytes"
+	"mime/multipart"
+	"path/filepath"
+	"io"
+	"log"
 )
 
 func build() cli.Command {
@@ -25,7 +31,7 @@ func build() cli.Command {
 type buildcmd struct {
 	verbose bool
 	remote bool
-
+	all string
 	client *fnclient.Functions
 
 }
@@ -41,6 +47,11 @@ func (b *buildcmd) flags() []cli.Flag {
 			Name :		"remote, r",
 			Usage :		"remote mode",
 			Destination:	&b.remote,
+		},
+		cli.StringFlag{
+			Name:		"all, a",
+			Usage:		"build all files",
+			Destination:	&b.all,
 		},
 	}
 }
@@ -71,7 +82,7 @@ func (b *buildcmd) build(c *cli.Context) error {
 		}
 
 		fmt.Printf("Function %v local built successfully.\n", ff.FullName())
-	} else {
+	} else if b.remote == true && b.all == "" {
 		funcfile, err := parsefuncfile(fn)
 
 		fmt.Println("Remote build : " + funcfile.FullName())
@@ -106,8 +117,64 @@ func (b *buildcmd) build(c *cli.Context) error {
 
 		fmt.Println("Remote build success!!!")
 
+	} else if b.remote == true && b.all != "" {
+		funcfile, err := parsefuncfile(fn)
+		extraParams := map[string]string{
+			"Name":		funcfile.FullName(),
+			"Deeplearning":	*funcfile.Deeplearning,
+			"Entrypoint":	funcfile.Entrypoint,
+			"Runtime":	*funcfile.Runtime,
+		}
+
+		request, err := newfileUploadRequest("http://192.168.0.11:8080/v1/builds", extraParams, "file", b.all)
+		if err != nil {
+			log.Fatal(err)
+		}
+		client := &http.Client{}
+		resp, err := client.Do(request)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			body := &bytes.Buffer{}
+			_, err := body.ReadFrom(resp.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+			resp.Body.Close()
+			fmt.Println(resp.StatusCode)
+			fmt.Println(resp.Header)
+
+			fmt.Println(body)
+		}
 	}
 
 	return nil
 }
 
+// Creates a new file upload http request with optional extra params
+func newfileUploadRequest(uri string, params map[string]string, paramName, path string) (*http.Request, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile(paramName, filepath.Base(path))
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(part, file)
+
+	for key, val := range params {
+		_ = writer.WriteField(key, val)
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", uri, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	return req, err
+}
