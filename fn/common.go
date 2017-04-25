@@ -140,6 +140,7 @@ var acceptableFnRuntimes = map[string]string{
 	"rust":             "corey/rust-alpine",
 	"dotnet":           "microsoft/dotnet:runtime",
 	"lambda-nodejs4.3": "iron/functions-lambda:nodejs4.3",
+	"lua":		    "cmdhema/cuda-torch:8.0",
 }
 
 const tplDockerfile = `FROM {{ .BaseImage }}

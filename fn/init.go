@@ -30,6 +30,7 @@ var (
 		".rs": "rust",
 		".cs": "dotnet",
 		".fs": "dotnet",
+		".lua": "lua",
 	}
 
 	fnInitRuntimes []string

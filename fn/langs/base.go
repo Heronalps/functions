@@ -17,6 +17,8 @@ func GetLangHelper(lang string) LangHelper {
 		return &DotNetLangHelper{}
 	case "lambda-nodejs4.3":
 		return &LambdaNodeHelper{}
+	case "lua":
+		return &LuaLangHelper{}
 	}
 	return nil
 }

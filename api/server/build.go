@@ -31,7 +31,8 @@ ADD . /function/
 
 var acceptableDeeplearningImages = map[string]string {
 	"tensorflow":		"tensorflow/tensorflow:latest-devel-gpu",
-	"theano":		"kaixhin/cuda-theano:8.0",
+	"theano":		"cmdhema/cuda-theano:8.0",
+	"torch":		"cmdhema/cuda-torch:8.0",
 }
 
 func (s *Server) handleBuild(c *gin.Context) {
@@ -79,11 +80,11 @@ func (s *Server) handleBuilds(c *gin.Context) {
 	fmt.Println(title)
 	fmt.Println(header.Filename)
 	fmt.Println(file)
-	out, err := os.Create("/home/taejoon/kjwook/iron/code/" + header.Filename)
+	out, err := os.Create(Path + header.Filename)
 	if err != nil {
 		return
 	}
-	fmt.Println("/home/taejoon/kjwook/iron/code/" + header.Filename + " Create success!")
+	fmt.Println(Path + header.Filename + " Create success!")
 	defer out.Close()
 	_, err = io.Copy(out, file)
 	if err != nil {
@@ -92,7 +93,7 @@ func (s *Server) handleBuilds(c *gin.Context) {
 	}
 	fmt.Println("Upload success")
 
-	err = unTarFuncFiles("/home/taejoon/kjwook/iron/code/" + header.Filename,"/home/taejoon/kjwook/iron/code/")
+	err = unTarFuncFiles(Path + header.Filename,Path)
 	if err != nil {
 		log.Debug(err)
 	}
