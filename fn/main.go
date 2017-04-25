@@ -78,6 +78,7 @@ GLOBAL OPTIONS:
 		version(),
 		createFn(),
 		inject(),
+		fileUploadFn(),
 	}
 	app.Commands = append(app.Commands, aliasesFn()...)
 
